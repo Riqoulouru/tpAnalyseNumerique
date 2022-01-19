@@ -17,13 +17,15 @@ canvas = FigureCanvasTkAgg(fig, master=root)  # A tk.DrawingArea.
 canvas.draw()
 canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
 
-
-def calculPolynome(x):
-    firstCalcul = (2* pow(x, 2))-(3*x)+1
-    secondCalcul = (math.sqrt(6)/2)*((-4*pow(x, 2))+4*x)
-    thirdCalcul = (math.sqrt(2)*((2*pow(x, 2))-x))
+def polynome(x):
+    firstCalcul = (2 * pow(x, 2)) - (3 * x) + 1
+    secondCalcul = (math.sqrt(6) / 2) * ((-4 * pow(x, 2)) + 4 * x)
+    thirdCalcul = (math.sqrt(2) * ((2 * pow(x, 2)) - x))
     result = firstCalcul + secondCalcul + thirdCalcul
     return result
+
+def calculPolynome(x):
+    return polynome(x)
 
 def polynomeResult(iteration):
 
@@ -47,6 +49,14 @@ def fonctionMoinsPolynomeResult(fonction,polynome):
     return result
 
 
+def fonctionMajorant(iteration):
+    result = []
+    for i in range(iteration):
+        print(1/math.factorial(iteration) * calculPolynome(i / iteration))
+        result.append(1/math.factorial(iteration) * calculPolynome(i / iteration))
+    return result
+
+
 def main():
     iteration = 100
     abscisse = []
@@ -57,10 +67,12 @@ def main():
     courbePolynome = polynomeResult(iteration)
     courbeFonction = fonctionResult(iteration)
     courbeCoparaison = fonctionMoinsPolynomeResult(courbePolynome,courbeFonction)
+    courbeMajorant = fonctionMajorant(iteration)
 
-    ax.plot(abscisse, courbePolynome, label='polynome')
-    ax.plot(abscisse, courbeFonction, label='fonction', color='red')
-    ax.plot(abscisse, courbeCoparaison, label='f(x) - p(x)', color='black')
+    #ax.plot(abscisse, courbePolynome, label='polynome')
+    #ax.plot(abscisse, courbeFonction, label='fonction', color='red')
+    #ax.plot(abscisse, courbeCoparaison, label='f(x) - p(x)', color='black')
+    ax.plot(abscisse, courbeMajorant, label='f(x) - p(x)', color='black')
 
     fig.legend()
 

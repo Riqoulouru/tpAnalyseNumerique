@@ -20,11 +20,8 @@ canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
 
 def calculPolynome(x):
     firstCalcul = (2* pow(x, 2))-(3*x)+1
-    print(firstCalcul)
     secondCalcul = (math.sqrt(6)/2)*((-4*pow(x, 2))+4*x)
-    print(secondCalcul)
     thirdCalcul = (math.sqrt(2)*((2*pow(x, 2))-x))
-    print(thirdCalcul)
     result = firstCalcul + secondCalcul + thirdCalcul
     return result
 
@@ -36,17 +33,34 @@ def polynomeResult(iteration):
 
     return result
 
+def fonctionResult(iteration):
+    result = []
+    for i in range(iteration):
+        result.append(math.sqrt(1+i/iteration))
+
+    return result
+def fonctionMoinsPolynomeResult(fonction,polynome):
+    result = []
+    for i in range(len(fonction)):
+        result.append(fonction[i]-polynome[i])
+
+    return result
+
+
 def main():
     iteration = 100
-    xs = []
-
+    abscisse = []
 
     for i in range(iteration):
-        xs.append(i)
+        abscisse.append(i)
 
-    ys = polynomeResult(iteration)
+    courbePolynome = polynomeResult(iteration)
+    courbeFonction = fonctionResult(iteration)
+    courbeCoparaison = fonctionMoinsPolynomeResult(courbePolynome,courbeFonction)
 
-    ax.plot(xs, ys, label='polynome')
+    ax.plot(abscisse, courbePolynome, label='polynome')
+    ax.plot(abscisse, courbeFonction, label='fonction', color='red')
+    ax.plot(abscisse, courbeCoparaison, label='f(x) - p(x)', color='black')
 
     fig.legend()
 

@@ -1,9 +1,8 @@
 import random
 import tkinter
-
-
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+import math
 
 root = tkinter.Tk()
 root.wm_title("Embedding in Tk")
@@ -19,21 +18,33 @@ canvas.draw()
 canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
 
 
+def calculPolynome(x):
+    firstCalcul = (2* pow(x, 2))-(3*x)+1
+    print(firstCalcul)
+    secondCalcul = (math.sqrt(6)/2)*((-4*pow(x, 2))+4*x)
+    print(secondCalcul)
+    thirdCalcul = (math.sqrt(2)*((2*pow(x, 2))-x))
+    print(thirdCalcul)
+    result = firstCalcul + secondCalcul + thirdCalcul
+    return result
 
-def getResult():
+def polynomeResult(iteration):
 
     result = []
-    for i in range(100):
-        result.append(i)
+    for i in range(iteration):
+        result.append(calculPolynome(i/iteration))
 
     return result
 
 def main():
+    iteration = 100
     xs = []
-    for i in range(100):
+
+
+    for i in range(iteration):
         xs.append(i)
 
-    ys = getResult()
+    ys = polynomeResult(iteration)
 
     ax.plot(xs, ys, label='polynome')
 

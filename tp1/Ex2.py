@@ -1,10 +1,16 @@
 
 def myhorner(dd, xi, x):
-    n = len(dd)
-    valeur = dd[n - 1]
-    for i in range(n - 2, -1, -1):
-        valeur = valeur * x + dd[i]
-    return valeur
+    res = 0
+
+    for val in dd:
+        calcul = val
+        for i in range(dd.index(val)):
+            calcul *= x-xi[i]
+
+        res += calcul
+
+    return res
+
 
 
 # xi et yi doivent avoir le même nombre d'éléments
@@ -29,9 +35,14 @@ def diffdiv(xi,yi):
     return getInterpollationPoint(xi, yi, [],len(xi))
 
 
-if __name__ == '__main__':
 
-    xi = [1,3,4,7]
-    yi = [-2,6,13,46]
-    interpollation = diffdiv(xi,yi)
-    print(myhorner(interpollation, [], 4))
+def main():
+    xi = [1, 3, 4, 7]
+    yi = [-2, 6, 13, 46]
+    interpollation = diffdiv(xi, yi)
+    xi = [1, 3, 4, 7]
+    print(interpollation)
+    print(myhorner(interpollation, xi, 7))
+
+if __name__ == '__main__':
+    main()

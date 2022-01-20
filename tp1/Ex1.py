@@ -39,7 +39,8 @@ def fonctionResult(iteration):
         result.append(math.sqrt(1+i/iteration))
 
     return result
-def fonctionMoinsPolynomeResult(fonction,polynome):
+
+def errorResult(fonction,polynome):
     result = []
     for i in range(len(fonction)):
         result.append(fonction[i]-polynome[i])
@@ -56,11 +57,11 @@ def main():
 
     courbePolynome = polynomeResult(iteration)
     courbeFonction = fonctionResult(iteration)
-    courbeCoparaison = fonctionMoinsPolynomeResult(courbePolynome,courbeFonction)
+    courbeErreur = errorResult(courbePolynome,courbeFonction)
 
     ax.plot(abscisse, courbePolynome, label='polynome')
     ax.plot(abscisse, courbeFonction, label='fonction', color='red')
-    ax.plot(abscisse, courbeCoparaison, label='f(x) - p(x)', color='black')
+    ax.plot(abscisse, courbeErreur, label='f(x) - p(x)', color='black')
 
     fig.legend()
 

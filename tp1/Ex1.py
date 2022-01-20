@@ -51,9 +51,11 @@ def fonctionMoinsPolynomeResult(fonction,polynome):
 
 def fonctionMajorant(iteration):
     result = []
-    for i in range(iteration):
-        print(1/math.factorial(iteration) * calculPolynome(i / iteration))
-        result.append(1/math.factorial(iteration) * calculPolynome(i / iteration))
+
+    # diviser tout les 1/100
+    for i in range(0, iteration):
+        result.append((3/pow(8*(i/100+1), 5/2)) * abs(i/100 * (i/100 - 1/2) * (i/100 - 1)))
+
     return result
 
 
@@ -72,7 +74,9 @@ def main():
     #ax.plot(abscisse, courbePolynome, label='polynome')
     #ax.plot(abscisse, courbeFonction, label='fonction', color='red')
     #ax.plot(abscisse, courbeCoparaison, label='f(x) - p(x)', color='black')
-    ax.plot(abscisse, courbeMajorant, label='f(x) - p(x)', color='black')
+
+    #ax.plot(abscisse, courbeMajorant, label='f(x) - p(x) majorant', color='black',)
+    #print(1/math.factorial(3) * max(courbeMajorant))
 
     fig.legend()
 

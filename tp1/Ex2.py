@@ -1,4 +1,10 @@
 
+def prog():
+    print("oui exo 2 ")
+
+
+if __name__=="__main__":
+    prog()
 
 # xi et yi doivent avoir le même nombre d'éléments
 # à l'appel de la fonction result doit être None

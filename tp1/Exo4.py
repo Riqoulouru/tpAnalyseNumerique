@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 
 
@@ -25,7 +27,6 @@ def displayMatrice(A):
 
 # Après réponse pour petit a) (résolution de x (b) directement pour le que le petit c) soit plus simple)
 def convertMToL(M):
-
     for i in range(len(M)):
         for j in range(len(M[0])):
 
@@ -57,7 +58,6 @@ def factoLU(A, b):
 
 
 def pivotColumnInf(A, n, b):
-
     # créer le M de base
     M = []
     for i in range(len(A)):
@@ -78,6 +78,7 @@ def pivotColumnInf(A, n, b):
 
                 # vérifier si pas inférieur à 10^-10
                 if abs(coef) < 0.0000000001:
+                    print(i, j)
                     return None
 
                 # pré-résolution de x
@@ -96,11 +97,10 @@ def pivotColumnInf(A, n, b):
 # Après réponse pour petit b)
 
 def drLU(C, b):
-
     A = []
 
     # Pour chacune des colones, utiliser le pivot pour mettre les éléments à 0 sauf sur la diagonal
-    for n in range(len(C[1])-1):
+    for n in range(len(C[1]) - 1):
         res = pivotColumnSup(C[1], len(C[1]) - n - 1, b)
         A, b = res[0], res[1]
 
@@ -108,7 +108,6 @@ def drLU(C, b):
 
 
 def pivotColumnSup(A, n, b):
-
     for i in range(len(A)):
         for j in range(len(A[0])):
 
@@ -130,7 +129,6 @@ def pivotColumnSup(A, n, b):
 
 # Après réponse pour petit b)
 def solveLU(A, b):
-
     res = factoLU(A, b)
 
     if res is None:
@@ -151,8 +149,21 @@ def solveLU(A, b):
 
 def main():
 
-    A = [[1, 0, 3], [2, 1, 2], [1, 1, 2]]
-    b = [1, 5, 3]
+    A = [
+        [-math.cos(math.pi / 6), 0, math.cos(math.pi / 4), 1, 0, 0, 0, 0, 0, 0, 0],
+        [-math.sin(math.pi / 6), 0, math.sin(math.pi / 4), 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, -1, -math.cos(math.pi / 4), 0, math.cos(math.pi / 4), 1, 0, 0, 0, 0, 0],
+        [0, 0, math.sin(math.pi / 4), 0, math.sin(math.pi / 4), 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, -1, -math.cos(math.pi / 4), 0, math.cos(math.pi / 4), 1, 0, 0, 0],
+        [0, 0, 0, 0, -math.sin(math.pi / 4), 0, -math.sin(math.pi / 4), 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, -math.cos(math.pi / 4), 0, math.cos(math.pi / 4), 1, 0],
+        [0, 0, 0, 0, 0, 0, math.sin(math.pi / 6), 0, math.sin(math.pi / 4), 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, -1, -math.cos(math.pi / 4), 0, math.cos(math.pi / 6)],
+        [0, 0, 0, 0, 0, 0, 0, 0, -math.sin(math.pi / 4), 0, -math.sin(math.pi / 6)],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -math.cos(math.pi / 6)]
+    ]
+
+    b = [0, 0, 0, 10000, 0, 0, 0, 20000, 0, 0, 0]
 
     x = solveLU(A, b)
 

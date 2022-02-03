@@ -2,7 +2,6 @@ import numpy as np
 
 
 def produitMatriciel(m1, m2):
-
     m = []
     if len(m1[0]) != len(m2):
         return False
@@ -18,37 +17,41 @@ def produitMatriciel(m1, m2):
 
 
 def displayMatrice(A):
-
     for i in range(len(A)):
         for j in range(len(A[0])):
             print(A[i][j], end="\t")
         print()
 
 
-def factoLU(A):
+def transposMToL(M):
+    for i in range(len(M)):
+        for j in range(len(M[0])):
+            if i != j:
+                M[i][j] = -M[i][j]
 
+    return M
+
+
+def factoLU(A):
     Ls = []
 
     for i in range(len(A[0]) - 1):
         res = pivotColumn(A, i)
+        if res is None:
+            return None
         A, L = res[0], res[1]
+        L = transposMToL(L)
         Ls.append(L)
-        print()
 
     L = Ls[0]
 
     for i in range(1, len(Ls)):
-        L = produitMatriciel(Ls[i], L)
-        displayMatrice(L)
-        print()
+        L = produitMatriciel(L, Ls[i])
 
-    displayMatrice(produitMatriciel(L, A))
-    print()
     return A
 
 
 def pivotColumn(A, n):
-
     L = []
     for i in range(len(A)):
         l = []
@@ -65,6 +68,10 @@ def pivotColumn(A, n):
             if j == n and i > n:
                 newRow = []
                 coef = A[i][j] / A[n][j]
+
+                if abs(coef) < 0.0000000001:
+                    return None
+
                 for k in range(len(A[i])):
                     newRow.append(A[i][k] - A[n][k] * coef)
                     L[i][j] = -coef
@@ -75,10 +82,12 @@ def pivotColumn(A, n):
 
 
 def main():
-
     A = [[1, 0, 3], [2, 1, 2], [1, 1, 2]]
     A = factoLU(A)
-    displayMatrice(A)
+    if A is None:
+        print("Error, coef en dessous de 10^-10")
+    else:
+        displayMatrice(A)
 
 
 if __name__ == "__main__":

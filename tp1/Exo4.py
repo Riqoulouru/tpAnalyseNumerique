@@ -78,7 +78,6 @@ def pivotColumnInf(A, n, b):
 
                 # vérifier si pas inférieur à 10^-10
                 if abs(coef) < 0.0000000001:
-                    print(i, j)
                     return None
 
                 # pré-résolution de x

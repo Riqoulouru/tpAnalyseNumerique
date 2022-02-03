@@ -23,24 +23,29 @@ def displayMatrice(A):
         print()
 
 
-def transposMToL(M):
+# Après réponse pour petit a) (résolution de x (b) directement pour le que le petit c) soit plus simple)
+def convertMToL(M):
+
     for i in range(len(M)):
         for j in range(len(M[0])):
+
             if i != j:
                 M[i][j] = -M[i][j]
 
     return M
 
 
-def factoLU(A):
+def factoLU(A, b):
     Ls = []
 
+    # pour chacune des colones
     for i in range(len(A[0]) - 1):
-        res = pivotColumn(A, i)
+        res = pivotColumnInf(A, i, b)
         if res is None:
             return None
-        A, L = res[0], res[1]
-        L = transposMToL(L)
+        A, L, b = res[0], res[1], res[2]
+
+        L = convertMToL(L)
         Ls.append(L)
 
     L = Ls[0]
@@ -48,11 +53,13 @@ def factoLU(A):
     for i in range(1, len(Ls)):
         L = produitMatriciel(L, Ls[i])
 
-    return A
+    return L, A, b
 
 
-def pivotColumn(A, n):
-    L = []
+def pivotColumnInf(A, n, b):
+
+    # créer le M de base
+    M = []
     for i in range(len(A)):
         l = []
         for j in range(len(A[0])):
@@ -60,7 +67,7 @@ def pivotColumn(A, n):
                 l.append(1)
             else:
                 l.append(0)
-        L.append(l)
+        M.append(l)
 
     for i in range(len(A)):
         for j in range(len(A[0])):
@@ -69,25 +76,85 @@ def pivotColumn(A, n):
                 newRow = []
                 coef = A[i][j] / A[n][j]
 
+                # vérifier si pas inférieur à 10^-10
                 if abs(coef) < 0.0000000001:
                     return None
 
+                # pré-résolution de x
+                b[i] = b[i] - b[n] * coef
+
+                # annuler (0) les colonnes en dessous
                 for k in range(len(A[i])):
                     newRow.append(A[i][k] - A[n][k] * coef)
-                    L[i][j] = -coef
+                    M[i][j] = -coef
                 A[i] = newRow
                 break
 
-    return [A, L]
+    return [A, M, b]
+
+
+# Après réponse pour petit b)
+
+def drLU(C, b):
+
+    A = []
+
+    # Pour chacune des colones, utiliser le pivot pour mettre les éléments à 0 sauf sur la diagonal
+    for n in range(len(C[1])-1):
+        res = pivotColumnSup(C[1], len(C[1]) - n - 1, b)
+        A, b = res[0], res[1]
+
+    return A, b
+
+
+def pivotColumnSup(A, n, b):
+
+    for i in range(len(A)):
+        for j in range(len(A[0])):
+
+            if len(A[0]) - j - 1 == n and len(A) - i - 1 < n:
+                newRow = []
+                # Définir le coef
+                coef = A[len(A) - i - 1][len(A[0]) - j - 1] / A[n][len(A[0]) - j - 1]
+
+                # Traiter la matrice de résultat
+                b[len(A) - i - 1] = b[len(A) - i - 1] - b[n] * coef
+
+                # Traiter la matrice pour la diagonaliser supérieur
+                for k in range(len(A[len(A) - i - 1])):
+                    newRow.append(A[len(A) - i - 1][k] - A[n][k] * coef)
+                A[len(A) - i - 1] = newRow
+
+    return A, b
+
+
+# Après réponse pour petit b)
+def solveLU(A, b):
+
+    res = factoLU(A, b)
+
+    if res is None:
+        print("Error, coef en dessous de 10^-10")
+        return None
+    else:
+        L, U, b = res[0], res[1], res[2]
+
+        res = drLU((L, U), b)
+        A, b = res[0], res[1]
+
+        print("A après pivot de Gauss: ")
+        displayMatrice(A)
+
+        print("\nx : ", b)
+        return b
 
 
 def main():
+
     A = [[1, 0, 3], [2, 1, 2], [1, 1, 2]]
-    A = factoLU(A)
-    if A is None:
-        print("Error, coef en dessous de 10^-10")
-    else:
-        displayMatrice(A)
+    b = [1, 5, 3]
+
+    x = solveLU(A, b)
 
 
 if __name__ == "__main__":

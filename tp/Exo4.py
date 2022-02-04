@@ -2,6 +2,29 @@ import math
 
 import numpy as np
 
+# fonction pour transposer les lignes où la diagonal est = 0 avec une pas égale à 0
+def transposAllIfNeeded(A, b):
+
+    copyA = A
+    copyB = b
+
+    for i in range(len(A)):
+        for j in range(len(A[0])):
+
+            if i == j:
+                if A[i][j] == 0:
+                    for k in range(len(A)):
+                        if A[len(A) - k - 1][j] != 0:
+                            temp = copyA[i]
+                            copyA[i] = A[len(A) - k - 1]
+                            copyA[len(A) - k - 1] = temp
+
+                            temp2 = copyB[i]
+                            copyB[i] = b[len(A) - k - 1]
+                            copyB[len(A) - k - 1] = temp2
+                            break
+
+    return copyA, copyB
 
 def produitMatriciel(m1, m2):
     m = []
@@ -21,8 +44,16 @@ def produitMatriciel(m1, m2):
 def displayMatrice(A):
     for i in range(len(A)):
         for j in range(len(A[0])):
-            print(A[i][j], end="\t")
+            if abs(A[i][j]) < 0.000000000001:
+                print(0, end="\t")
+            else:
+                print(A[i][j], end="\t")
         print()
+
+
+def displayMatriceColumnTension(A):
+    for i in range(len(A)):
+        print("T", i+1," =  ", A[i], end="\n")
 
 
 # Après réponse pour petit a) (résolution de x (b) directement pour le que le petit c) soit plus simple)
@@ -77,7 +108,7 @@ def pivotColumnInf(A, n, b):
                 coef = A[i][j] / A[n][j]
 
                 # vérifier si pas inférieur à 10^-10
-                if abs(coef) < 0.0000000001:
+                if A[i][j] != 0 and abs(coef) < 0.0000000001:
                     return None
 
                 # pré-résolution de x
@@ -128,6 +159,13 @@ def pivotColumnSup(A, n, b):
 
 # Après réponse pour petit b)
 def solveLU(A, b):
+
+    res = transposAllIfNeeded(A, b)
+    A, b = res[0], res[1]
+
+    displayMatrice(A)
+    print()
+
     res = factoLU(A, b)
 
     if res is None:
@@ -150,7 +188,8 @@ def solveLU(A, b):
         print("A après pivot de Gauss: ")
         displayMatrice(A)
 
-        print("\nx : ", b)
+        print()
+        displayMatriceColumnTension(b)
         return b
 
 
@@ -163,7 +202,7 @@ def main():
         [0, 0, math.sin(math.pi / 4), 0, math.sin(math.pi / 4), 0, 0, 0, 0, 0, 0],
         [0, 0, 0, -1, -math.cos(math.pi / 4), 0, math.cos(math.pi / 4), 1, 0, 0, 0],
         [0, 0, 0, 0, -math.sin(math.pi / 4), 0, -math.sin(math.pi / 4), 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 1, -math.cos(math.pi / 4), 0, math.cos(math.pi / 4), 1, 0],
+        [0, 0, 0, 0, 0, -1, -math.cos(math.pi / 4), 0, math.cos(math.pi / 4), 1, 0],
         [0, 0, 0, 0, 0, 0, math.sin(math.pi / 6), 0, math.sin(math.pi / 4), 0, 0],
         [0, 0, 0, 0, 0, 0, 0, -1, -math.cos(math.pi / 4), 0, math.cos(math.pi / 6)],
         [0, 0, 0, 0, 0, 0, 0, 0, -math.sin(math.pi / 4), 0, -math.sin(math.pi / 6)],
@@ -172,10 +211,9 @@ def main():
 
     b = [0, 0, 0, 10000, 0, 0, 0, 20000, 0, 0, 0]
 
-    A = [[1, 0, 3], [2, 1, 2], [1, 1, 2]]
-    b = [1, 5, 3]
+    b = solveLU(A, b)
 
-    x = solveLU(A, b)
+
 
 
 if __name__ == "__main__":

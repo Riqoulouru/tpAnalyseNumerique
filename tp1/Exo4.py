@@ -136,6 +136,14 @@ def solveLU(A, b):
     else:
         L, U, b = res[0], res[1], res[2]
 
+        print("L : ")
+        displayMatrice(L)
+        print()
+
+        print("U : ")
+        displayMatrice(U)
+        print()
+
         res = drLU((L, U), b)
         A, b = res[0], res[1]
 
@@ -163,6 +171,9 @@ def main():
     ]
 
     b = [0, 0, 0, 10000, 0, 0, 0, 20000, 0, 0, 0]
+
+    A = [[1, 0, 3], [2, 1, 2], [1, 1, 2]]
+    b = [1, 5, 3]
 
     x = solveLU(A, b)
 
